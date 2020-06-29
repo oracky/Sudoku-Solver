@@ -1,9 +1,9 @@
 /***************************************************************
  * Name:      SudokuApp.h
  * Purpose:   Defines Application Class
- * Author:    Weronika Wojtan ()
- * Created:   2020-05-13
- * Copyright: Weronika Wojtan ()
+ * Author:    Michal Oracki
+ * Created:   2020-06-12
+ * Copyright:
  * License:
  **************************************************************/
 

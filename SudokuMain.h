@@ -1,14 +1,15 @@
 /***************************************************************
  * Name:      SudokuMain.h
  * Purpose:   Defines Application Frame
- * Author:    Beata Rogala ()
- * Created:   2020-05-13
- * Copyright: Beata Rogala ()
+ * Author:    Michal Oracki
+ * Created:   2020-06-12
+ * Copyright:
  * License:
  **************************************************************/
 
 #ifndef SUDOKUMAIN_H
 #define SUDOKUMAIN_H
+#include <vector>
 
 //(*Headers(SudokuDialog)
 #include <wx/button.h>
@@ -19,8 +20,11 @@
 #include <wx/textctrl.h>
 //*)
 
-#undef _
-#define _(s) wxString::FromUTF8(s)
+struct Grid
+{
+    int grid[9][9];
+    bool possible;
+};
 
 class SudokuDialog: public wxDialog
 {
@@ -28,17 +32,24 @@ class SudokuDialog: public wxDialog
 
         SudokuDialog(wxWindow* parent,wxWindowID id = -1);
         virtual ~SudokuDialog();
-    private:
-        bool pobierz_liczby(int X[9][9]);
-        void wpisz_liczby(int X[9][9]);
 
-    public:
+    private:
+        int gridNumber;
+        int gridIndex = 0;
+        std::vector<Grid> gridList;
+        bool getNumbers(int X[9][9]);
+        void setNumbers(int X[9][9]);
+        bool transformTo2DArray(const std::vector<wxString> & T, int X[9][9]);
+        void clearInputs();
+        void initializeFonts();
 
         //(*Handlers(SudokuDialog)
         void OnQuit(wxCommandEvent& event);
         void OnAbout(wxCommandEvent& event);
-        void OnButton1Click(wxCommandEvent& event);
-                void OnButton2Click(wxCommandEvent& event);
+        void OnbtnResultClick(wxCommandEvent& event);
+        void OnbtnClearClick(wxCommandEvent& event);
+        void OnButton3Click(wxCommandEvent& event);
+        void OnButton4Click(wxCommandEvent& event);
         //*)
 
         //(*Identifiers(SudokuDialog)
@@ -135,11 +146,15 @@ class SudokuDialog: public wxDialog
         static const long ID_PANEL9;
         static const long ID_BUTTON1;
         static const long ID_BUTTON2;
+        static const long ID_BUTTON3;
+        static const long ID_BUTTON4;
         //*)
 
         //(*Declarations(SudokuDialog)
-        wxButton* Button1;
-        wxButton* Button2;
+        wxButton* Button3;
+        wxButton* Button4;
+        wxButton* btnClear;
+        wxButton* btnResult;
         wxPanel* Panel1;
         wxPanel* Panel2;
         wxPanel* Panel3;

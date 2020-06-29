@@ -1,26 +1,29 @@
 /***************************************************************
  * Name:      SudokuMain.cpp
  * Purpose:   Code for Application Frame
- * Author:    Beata Rogala ()
- * Created:   2020-05-13
- * Copyright: Beata Rogala ()
+ * Author:    Beata Rogala
+ * Created:   2020-06-12
+ * Copyright:
  * License:
  **************************************************************/
 
 #include "SudokuMain.h"
 #include <wx/msgdlg.h>
-
 #include <vector>
-using namespace std;
+#include "Sudoku.h"
+#include "TxtReader.h"
+#include <string>
+#include <iostream>
 
+#define FIELD_VALUES w(1)w(2)w(3)w(4)w(5)w(6)w(7)w(8)w(9)w(10)w(11)w(12)w(13)w(14)w(15)w(16)w(17)w(18)w(19)w(20)w(21)w(22)w(23)w(24)w(25)w(26)w(27)w(28)w(29)w(30)w(31)w(32)w(33)w(34)w(35)w(36)w(37)w(38)w(39)w(40)w(41)w(42)w(43)w(44)w(45)w(46)w(47)w(48)w(49)w(50)w(51)w(52)w(53)w(54)w(55)w(56)w(57)w(58)w(59)w(60)w(61)w(62)w(63)w(64)w(65)w(66)w(67)w(68)w(69)w(70)w(71)w(72)w(73)w(74)w(75)w(76)w(77)w(78)w(79)w(80)w(81)
+
+//using namespace std;
 
 //(*InternalHeaders(SudokuDialog)
+#include <wx/font.h>
 #include <wx/intl.h>
 #include <wx/string.h>
 //*)
-
-#undef _
-#define _(s) wxString::FromUTF8(s)
 
 //helper functions
 enum wxbuildinfoformat {
@@ -44,10 +47,11 @@ wxString wxbuildinfo(wxbuildinfoformat format)
         wxbuild << _T("-ANSI build");
 #endif // wxUSE_UNICODE
     }
-    int x;
+
     return wxbuild;
 }
 
+// Auto generated code
 //(*IdInit(SudokuDialog)
 const long SudokuDialog::ID_STATICTEXT1 = wxNewId();
 const long SudokuDialog::ID_TEXTCTRL1 = wxNewId();
@@ -142,6 +146,8 @@ const long SudokuDialog::ID_TEXTCTRL81 = wxNewId();
 const long SudokuDialog::ID_PANEL9 = wxNewId();
 const long SudokuDialog::ID_BUTTON1 = wxNewId();
 const long SudokuDialog::ID_BUTTON2 = wxNewId();
+const long SudokuDialog::ID_BUTTON3 = wxNewId();
+const long SudokuDialog::ID_BUTTON4 = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(SudokuDialog,wxDialog)
@@ -151,6 +157,7 @@ END_EVENT_TABLE()
 
 SudokuDialog::SudokuDialog(wxWindow* parent,wxWindowID id)
 {
+    // Auto generated code
     //(*Initialize(SudokuDialog)
     wxFlexGridSizer* FlexGridSizer1;
     wxFlexGridSizer* FlexGridSizer2;
@@ -174,22 +181,40 @@ SudokuDialog::SudokuDialog(wxWindow* parent,wxWindowID id)
     Panel1->SetBackgroundColour(wxColour(198,198,255));
     GridSizer2 = new wxGridSizer(3, 3, 0, 0);
     TextCtrl1 = new wxTextCtrl(Panel1, ID_TEXTCTRL1, wxEmptyString, wxDefaultPosition, wxDLG_UNIT(Panel1,wxSize(30,30)), 0, wxDefaultValidator, _T("ID_TEXTCTRL1"));
+    wxFont TextCtrl1Font(16,wxFONTFAMILY_SWISS,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false,_T("Arial"),wxFONTENCODING_DEFAULT);
+    TextCtrl1->SetFont(TextCtrl1Font);
     GridSizer2->Add(TextCtrl1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     TextCtrl2 = new wxTextCtrl(Panel1, ID_TEXTCTRL2, wxEmptyString, wxDefaultPosition, wxDLG_UNIT(Panel1,wxSize(30,30)), 0, wxDefaultValidator, _T("ID_TEXTCTRL2"));
+    wxFont TextCtrl2Font(16,wxFONTFAMILY_SWISS,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false,wxEmptyString,wxFONTENCODING_DEFAULT);
+    TextCtrl2->SetFont(TextCtrl2Font);
     GridSizer2->Add(TextCtrl2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     TextCtrl3 = new wxTextCtrl(Panel1, ID_TEXTCTRL3, wxEmptyString, wxDefaultPosition, wxDLG_UNIT(Panel1,wxSize(30,30)), 0, wxDefaultValidator, _T("ID_TEXTCTRL3"));
+    wxFont TextCtrl3Font(16,wxFONTFAMILY_SWISS,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false,wxEmptyString,wxFONTENCODING_DEFAULT);
+    TextCtrl3->SetFont(TextCtrl3Font);
     GridSizer2->Add(TextCtrl3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     TextCtrl4 = new wxTextCtrl(Panel1, ID_TEXTCTRL4, wxEmptyString, wxDefaultPosition, wxDLG_UNIT(Panel1,wxSize(30,30)), 0, wxDefaultValidator, _T("ID_TEXTCTRL4"));
+    wxFont TextCtrl4Font(16,wxFONTFAMILY_SWISS,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false,wxEmptyString,wxFONTENCODING_DEFAULT);
+    TextCtrl4->SetFont(TextCtrl4Font);
     GridSizer2->Add(TextCtrl4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     TextCtrl5 = new wxTextCtrl(Panel1, ID_TEXTCTRL5, wxEmptyString, wxDefaultPosition, wxDLG_UNIT(Panel1,wxSize(30,30)), 0, wxDefaultValidator, _T("ID_TEXTCTRL5"));
+    wxFont TextCtrl5Font(16,wxFONTFAMILY_SWISS,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false,wxEmptyString,wxFONTENCODING_DEFAULT);
+    TextCtrl5->SetFont(TextCtrl5Font);
     GridSizer2->Add(TextCtrl5, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     TextCtrl6 = new wxTextCtrl(Panel1, ID_TEXTCTRL6, wxEmptyString, wxDefaultPosition, wxDLG_UNIT(Panel1,wxSize(30,30)), 0, wxDefaultValidator, _T("ID_TEXTCTRL6"));
+    wxFont TextCtrl6Font(16,wxFONTFAMILY_SWISS,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false,wxEmptyString,wxFONTENCODING_DEFAULT);
+    TextCtrl6->SetFont(TextCtrl6Font);
     GridSizer2->Add(TextCtrl6, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     TextCtrl7 = new wxTextCtrl(Panel1, ID_TEXTCTRL7, wxEmptyString, wxDefaultPosition, wxDLG_UNIT(Panel1,wxSize(30,30)), 0, wxDefaultValidator, _T("ID_TEXTCTRL7"));
+    wxFont TextCtrl7Font(16,wxFONTFAMILY_SWISS,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false,wxEmptyString,wxFONTENCODING_DEFAULT);
+    TextCtrl7->SetFont(TextCtrl7Font);
     GridSizer2->Add(TextCtrl7, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     TextCtrl8 = new wxTextCtrl(Panel1, ID_TEXTCTRL8, wxEmptyString, wxDefaultPosition, wxDLG_UNIT(Panel1,wxSize(30,30)), 0, wxDefaultValidator, _T("ID_TEXTCTRL8"));
+    wxFont TextCtrl8Font(16,wxFONTFAMILY_SWISS,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false,wxEmptyString,wxFONTENCODING_DEFAULT);
+    TextCtrl8->SetFont(TextCtrl8Font);
     GridSizer2->Add(TextCtrl8, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     TextCtrl9 = new wxTextCtrl(Panel1, ID_TEXTCTRL9, wxEmptyString, wxDefaultPosition, wxDLG_UNIT(Panel1,wxSize(30,30)), 0, wxDefaultValidator, _T("ID_TEXTCTRL9"));
+    wxFont TextCtrl9Font(16,wxFONTFAMILY_SWISS,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false,wxEmptyString,wxFONTENCODING_DEFAULT);
+    TextCtrl9->SetFont(TextCtrl9Font);
     GridSizer2->Add(TextCtrl9, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     Panel1->SetSizer(GridSizer2);
     GridSizer2->Fit(Panel1);
@@ -199,22 +224,40 @@ SudokuDialog::SudokuDialog(wxWindow* parent,wxWindowID id)
     Panel2->SetBackgroundColour(wxColour(147,147,255));
     GridSizer3 = new wxGridSizer(3, 3, 0, 0);
     TextCtrl10 = new wxTextCtrl(Panel2, ID_TEXTCTRL10, wxEmptyString, wxDefaultPosition, wxDLG_UNIT(Panel2,wxSize(30,30)), 0, wxDefaultValidator, _T("ID_TEXTCTRL10"));
+    wxFont TextCtrl10Font(16,wxFONTFAMILY_SWISS,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false,wxEmptyString,wxFONTENCODING_DEFAULT);
+    TextCtrl10->SetFont(TextCtrl10Font);
     GridSizer3->Add(TextCtrl10, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     TextCtrl11 = new wxTextCtrl(Panel2, ID_TEXTCTRL11, wxEmptyString, wxDefaultPosition, wxDLG_UNIT(Panel2,wxSize(30,30)), 0, wxDefaultValidator, _T("ID_TEXTCTRL11"));
+    wxFont TextCtrl11Font(16,wxFONTFAMILY_SWISS,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false,wxEmptyString,wxFONTENCODING_DEFAULT);
+    TextCtrl11->SetFont(TextCtrl11Font);
     GridSizer3->Add(TextCtrl11, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     TextCtrl12 = new wxTextCtrl(Panel2, ID_TEXTCTRL12, wxEmptyString, wxDefaultPosition, wxDLG_UNIT(Panel2,wxSize(30,30)), 0, wxDefaultValidator, _T("ID_TEXTCTRL12"));
+    wxFont TextCtrl12Font(16,wxFONTFAMILY_SWISS,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false,wxEmptyString,wxFONTENCODING_DEFAULT);
+    TextCtrl12->SetFont(TextCtrl12Font);
     GridSizer3->Add(TextCtrl12, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     TextCtrl13 = new wxTextCtrl(Panel2, ID_TEXTCTRL13, wxEmptyString, wxDefaultPosition, wxDLG_UNIT(Panel2,wxSize(30,30)), 0, wxDefaultValidator, _T("ID_TEXTCTRL13"));
+    wxFont TextCtrl13Font(16,wxFONTFAMILY_SWISS,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false,wxEmptyString,wxFONTENCODING_DEFAULT);
+    TextCtrl13->SetFont(TextCtrl13Font);
     GridSizer3->Add(TextCtrl13, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     TextCtrl14 = new wxTextCtrl(Panel2, ID_TEXTCTRL14, wxEmptyString, wxDefaultPosition, wxDLG_UNIT(Panel2,wxSize(30,30)), 0, wxDefaultValidator, _T("ID_TEXTCTRL14"));
+    wxFont TextCtrl14Font(16,wxFONTFAMILY_SWISS,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false,wxEmptyString,wxFONTENCODING_DEFAULT);
+    TextCtrl14->SetFont(TextCtrl14Font);
     GridSizer3->Add(TextCtrl14, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     TextCtrl15 = new wxTextCtrl(Panel2, ID_TEXTCTRL15, wxEmptyString, wxDefaultPosition, wxDLG_UNIT(Panel2,wxSize(30,30)), 0, wxDefaultValidator, _T("ID_TEXTCTRL15"));
+    wxFont TextCtrl15Font(16,wxFONTFAMILY_SWISS,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false,wxEmptyString,wxFONTENCODING_DEFAULT);
+    TextCtrl15->SetFont(TextCtrl15Font);
     GridSizer3->Add(TextCtrl15, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     TextCtrl16 = new wxTextCtrl(Panel2, ID_TEXTCTRL16, wxEmptyString, wxDefaultPosition, wxDLG_UNIT(Panel2,wxSize(30,30)), 0, wxDefaultValidator, _T("ID_TEXTCTRL16"));
+    wxFont TextCtrl16Font(16,wxFONTFAMILY_SWISS,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false,wxEmptyString,wxFONTENCODING_DEFAULT);
+    TextCtrl16->SetFont(TextCtrl16Font);
     GridSizer3->Add(TextCtrl16, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     TextCtrl17 = new wxTextCtrl(Panel2, ID_TEXTCTRL17, wxEmptyString, wxDefaultPosition, wxDLG_UNIT(Panel2,wxSize(30,30)), 0, wxDefaultValidator, _T("ID_TEXTCTRL17"));
+    wxFont TextCtrl17Font(16,wxFONTFAMILY_SWISS,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false,wxEmptyString,wxFONTENCODING_DEFAULT);
+    TextCtrl17->SetFont(TextCtrl17Font);
     GridSizer3->Add(TextCtrl17, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     TextCtrl18 = new wxTextCtrl(Panel2, ID_TEXTCTRL18, wxEmptyString, wxDefaultPosition, wxDLG_UNIT(Panel2,wxSize(30,30)), 0, wxDefaultValidator, _T("ID_TEXTCTRL18"));
+    wxFont TextCtrl18Font(16,wxFONTFAMILY_SWISS,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false,wxEmptyString,wxFONTENCODING_DEFAULT);
+    TextCtrl18->SetFont(TextCtrl18Font);
     GridSizer3->Add(TextCtrl18, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     Panel2->SetSizer(GridSizer3);
     GridSizer3->Fit(Panel2);
@@ -224,6 +267,8 @@ SudokuDialog::SudokuDialog(wxWindow* parent,wxWindowID id)
     Panel3->SetBackgroundColour(wxColour(198,198,255));
     GridSizer4 = new wxGridSizer(3, 3, 0, 0);
     TextCtrl19 = new wxTextCtrl(Panel3, ID_TEXTCTRL19, wxEmptyString, wxDefaultPosition, wxDLG_UNIT(Panel3,wxSize(30,30)), 0, wxDefaultValidator, _T("ID_TEXTCTRL19"));
+    wxFont TextCtrl19Font(16,wxFONTFAMILY_SWISS,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false,wxEmptyString,wxFONTENCODING_DEFAULT);
+    TextCtrl19->SetFont(TextCtrl19Font);
     GridSizer4->Add(TextCtrl19, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     TextCtrl20 = new wxTextCtrl(Panel3, ID_TEXTCTRL20, wxEmptyString, wxDefaultPosition, wxDLG_UNIT(Panel3,wxSize(30,30)), 0, wxDefaultValidator, _T("ID_TEXTCTRL20"));
     GridSizer4->Add(TextCtrl20, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -397,18 +442,26 @@ SudokuDialog::SudokuDialog(wxWindow* parent,wxWindowID id)
     GridSizer1->Add(Panel9, 1, wxALL|wxEXPAND, 5);
     FlexGridSizer1->Add(GridSizer1, 1, wxALL, 5);
     FlexGridSizer2 = new wxFlexGridSizer(1, 4, 0, 0);
-    Button1 = new wxButton(this, ID_BUTTON1, _("Rozwiązanie"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON1"));
-    FlexGridSizer2->Add(Button1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    Button2 = new wxButton(this, ID_BUTTON2, _("Nowa plansza"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON2"));
-    FlexGridSizer2->Add(Button2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    btnResult = new wxButton(this, ID_BUTTON1, _("Result"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON1"));
+    FlexGridSizer2->Add(btnResult, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    btnClear = new wxButton(this, ID_BUTTON2, _("Clear"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON2"));
+    FlexGridSizer2->Add(btnClear, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    Button3 = new wxButton(this, ID_BUTTON3, _("Load Grid"), wxDefaultPosition, wxSize(90,22), 0, wxDefaultValidator, _T("ID_BUTTON3"));
+    FlexGridSizer2->Add(Button3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    Button4 = new wxButton(this, ID_BUTTON4, _("Save Grid"), wxDefaultPosition, wxSize(98,22), 0, wxDefaultValidator, _T("ID_BUTTON4"));
+    FlexGridSizer2->Add(Button4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer1->Add(FlexGridSizer2, 1, wxALL|wxEXPAND, 5);
     SetSizer(FlexGridSizer1);
     FlexGridSizer1->Fit(this);
     FlexGridSizer1->SetSizeHints(this);
 
-    Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SudokuDialog::OnButton1Click);
-    Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SudokuDialog::OnButton2Click);
+    Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SudokuDialog::OnbtnResultClick);
+    Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SudokuDialog::OnbtnClearClick);
+    Connect(ID_BUTTON3,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SudokuDialog::OnButton3Click);
+    Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SudokuDialog::OnButton4Click);
     //*)
+    gridNumber = TxtReader::getGridFromTxt("plansze.txt", gridList);
+    initializeFonts();
 }
 
 SudokuDialog::~SudokuDialog()
@@ -417,19 +470,22 @@ SudokuDialog::~SudokuDialog()
     //*)
 }
 
-bool zamien_na_liczby_2d(const vector<wxString> & T, int X[9][9]){
-    vector<int> U(T.size());
-    for (int i=0; i< T.size(); i++) {
-        if (T[i]=="") {
-            U[i] = 0;  // 0 znaczy, że nic nie było tam wpisane
-        } else {
+bool SudokuDialog::transformTo2DArray(const std::vector<wxString> & T, int X[9][9]){
+    std::vector<int> U(T.size());
+    for (int i=0; i< T.size(); i++)
+    {
+        if (T[i]=="")
+            U[i] = 0;
+        else
+        {
             long int tmp;
-            if (!T[i].ToLong (&tmp)) {
-                // nie dało się zrobić konwersji, wychodzimy z wynikiem false
+            if (!T[i].ToLong (&tmp))
                 return false;
-            } else {
-                if ( (tmp<10) && (tmp>0))
-                    U[i] = tmp;
+            else
+            {
+                int t = static_cast<int>(tmp);
+                if ( (t<10) && (t>0))
+                    U[i] = t;
                 else
                     return false;
             }
@@ -447,36 +503,46 @@ bool zamien_na_liczby_2d(const vector<wxString> & T, int X[9][9]){
     return true;
 }
 
-#define WWW w(1)w(2)w(3)w(4)w(5)w(6)w(7)w(8)w(9)w(10)w(11)w(12)w(13)w(14)w(15)w(16)w(17)w(18)w(19)w(20)w(21)w(22)w(23)w(24)w(25)w(26)w(27)w(28)w(29)w(30)w(31)w(32)w(33)w(34)w(35)w(36)w(37)w(38)w(39)w(40)w(41)w(42)w(43)w(44)w(45)w(46)w(47)w(48)w(49)w(50)w(51)w(52)w(53)w(54)w(55)w(56)w(57)w(58)w(59)w(60)w(61)w(62)w(63)w(64)w(65)w(66)w(67)w(68)w(69)w(70)w(71)w(72)w(73)w(74)w(75)w(76)w(77)w(78)w(79)w(80)w(81)
-
-bool SudokuDialog::pobierz_liczby(int X[9][9])
+bool SudokuDialog::getNumbers(int X[SIZE][SIZE])
 {
-   vector<wxString> T(81); //najpierw wrzucenie tekstów w tablicę jednowymiarową
+   std::vector<wxString> T(81); //najpierw wrzucenie tekstów w tablicę jednowymiarową
    #define w(i) T[i-1] = TextCtrl##i->GetValue();
-   WWW // zatem teraz już mamy teksty z kotrolek wbite
+   FIELD_VALUES // zatem teraz już mamy teksty z kotrolek wbite
    #undef w
-   bool OK = zamien_na_liczby_2d(T,X);
-   return OK;
+   return transformTo2DArray(T, X);
 }
 
-
-
-void SudokuDialog::wpisz_liczby(int X[9][9])
+void SudokuDialog::setNumbers(int X[SIZE][SIZE])
 {
-   vector<wxString> T(81); //najpierw wrzucenie liczb w tablicę jednowymiarową
+   std::vector<wxString> T(81); //najpierw wrzucenie liczb w tablicę jednowymiarową
    for (int wiersz=0; wiersz<9; wiersz++)
         for (int kolumna=0; kolumna<9; kolumna++) {
             int j = (wiersz%3)*3 + kolumna%3;
             int k = (wiersz/3)*3 + kolumna/3;
             int nr = k*9 + j;
             if (X[wiersz][kolumna]==0)
-                T[nr] = ""; else
-                T[nr] << X[wiersz][kolumna];
+                T[nr] = "";
+            else
+                T[nr] = std::to_string(X[wiersz][kolumna]);
         }
 
    #define w(i) TextCtrl##i->SetValue(T[i-1]);
-   WWW // zatem teraz już w kontrolkach sa nowe wartości
+   FIELD_VALUES // zatem teraz już w kontrolkach sa nowe wartości
    #undef w
+}
+
+void SudokuDialog::clearInputs()
+{
+    #define w(i) TextCtrl##i->SetValue(_(""));
+    FIELD_VALUES
+    #undef w
+}
+
+void SudokuDialog::initializeFonts()
+{
+    #define w(i) TextCtrl##i->SetFont(wxFont(26, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false));
+    FIELD_VALUES
+    #undef w
 }
 
 void SudokuDialog::OnQuit(wxCommandEvent& event)
@@ -490,134 +556,58 @@ void SudokuDialog::OnAbout(wxCommandEvent& event)
     wxMessageBox(msg, _("Welcome to..."));
 }
 
-
-
-
-void SudokuDialog::OnButton1Click(wxCommandEvent& event)
+void SudokuDialog::OnbtnResultClick(wxCommandEvent& event)
 {
-     int X[9][9];
-    if (!pobierz_liczby(X)) {
-            cout <<"błąd";
-       wxMessageBox( _("wpisano złe elementy "), "UWAGA", wxICON_INFORMATION);
+    Grid g;
 
-    } else {
-       // tu jest wszystko OK, w X[9][9] jest klasyczna dwuwymiarowa tablica liczb całkowitych (0 oznacza, że nie było tam nic wpisanego)
-        // tu trzeba wywołać funkcję, która stwierdzi czy to sie da rozwiązać (ewentualnie czy jednoznacznie) i zwróci
-        // tablicę X z wpisanym rozwiązanie, które następnie trzeba będzie wpisać do kontrolek (funkcja wpisz_liczby)
+    if (!getNumbers(g.grid)) {
+            std::cout <<"ERROR";
+       wxMessageBox( _("Wrong arguments"), "ERROR", wxICON_INFORMATION);
+       clearInputs();
+    }
+    else {
 
-        //wpisz_liczby(X);
+        if(!Sudoku::solve(g.grid))
+        {
+            wxMessageBox( _("Current sudoku is impossible to be solved"), "ERROR", wxICON_INFORMATION);
+            g.possible = false;
+        }
+        setNumbers(g.grid);
+
     }
 }
 
-
-
-void SudokuDialog::OnButton2Click(wxCommandEvent& event)
+void SudokuDialog::OnbtnClearClick(wxCommandEvent& event)
 {
+    clearInputs();
+}
+
+void SudokuDialog::OnButton3Click(wxCommandEvent& event)
+{
+    if(gridNumber>0)
     {
-    TextCtrl1->SetValue(_(""));
-    TextCtrl2->SetValue(_(""));
-    TextCtrl3->SetValue(_(""));
-    TextCtrl4->SetValue(_(""));
-    TextCtrl5->SetValue(_(""));
-    TextCtrl6->SetValue(_(""));
-    TextCtrl7->SetValue(_(""));
-    TextCtrl8->SetValue(_(""));
-    TextCtrl9->SetValue(_(""));
+        if(gridIndex==gridNumber-1) gridIndex = 0;
+        setNumbers(gridList[gridIndex].grid);
+        gridIndex++;
     }
 
-    {
-    TextCtrl10->SetValue(_(""));
-    TextCtrl11->SetValue(_(""));
-    TextCtrl12->SetValue(_(""));
-    TextCtrl13->SetValue(_(""));
-    TextCtrl14->SetValue(_(""));
-    TextCtrl15->SetValue(_(""));
-    TextCtrl16->SetValue(_(""));
-    TextCtrl17->SetValue(_(""));
-    TextCtrl18->SetValue(_(""));
+}
+
+void SudokuDialog::OnButton4Click(wxCommandEvent& event)
+{
+    Grid g;
+
+    if (!getNumbers(g.grid)) {
+            std::cout <<"ERROR";
+       wxMessageBox( _("Wrong arguments"), "ERROR", wxICON_INFORMATION);
+       clearInputs();
+    }
+    else{
+        if(!TxtReader::saveGrid("plansze.txt",g))
+            wxMessageBox( _("Saving process failed"), "ERROR", wxICON_INFORMATION);
     }
 
-    {
-    TextCtrl19->SetValue(_(""));
-    TextCtrl20->SetValue(_(""));
-    TextCtrl21->SetValue(_(""));
-    TextCtrl22->SetValue(_(""));
-    TextCtrl23->SetValue(_(""));
-    TextCtrl24->SetValue(_(""));
-    TextCtrl25->SetValue(_(""));
-    TextCtrl26->SetValue(_(""));
-    TextCtrl27->SetValue(_(""));
-    }
-
-    {
-    TextCtrl28->SetValue(_(""));
-    TextCtrl29->SetValue(_(""));
-    TextCtrl30->SetValue(_(""));
-    TextCtrl31->SetValue(_(""));
-    TextCtrl32->SetValue(_(""));
-    TextCtrl33->SetValue(_(""));
-    TextCtrl34->SetValue(_(""));
-    TextCtrl35->SetValue(_(""));
-    TextCtrl36->SetValue(_(""));
-    }
-
-    {
-    TextCtrl37->SetValue(_(""));
-    TextCtrl38->SetValue(_(""));
-    TextCtrl39->SetValue(_(""));
-    TextCtrl40->SetValue(_(""));
-    TextCtrl41->SetValue(_(""));
-    TextCtrl42->SetValue(_(""));
-    TextCtrl43->SetValue(_(""));
-    TextCtrl44->SetValue(_(""));
-    TextCtrl45->SetValue(_(""));
-    }
-
-    {
-    TextCtrl46->SetValue(_(""));
-    TextCtrl47->SetValue(_(""));
-    TextCtrl48->SetValue(_(""));
-    TextCtrl49->SetValue(_(""));
-    TextCtrl50->SetValue(_(""));
-    TextCtrl51->SetValue(_(""));
-    TextCtrl52->SetValue(_(""));
-    TextCtrl53->SetValue(_(""));
-    TextCtrl54->SetValue(_(""));
-    }
-
-    {
-    TextCtrl55->SetValue(_(""));
-    TextCtrl56->SetValue(_(""));
-    TextCtrl57->SetValue(_(""));
-    TextCtrl58->SetValue(_(""));
-    TextCtrl59->SetValue(_(""));
-    TextCtrl60->SetValue(_(""));
-    TextCtrl61->SetValue(_(""));
-    TextCtrl62->SetValue(_(""));
-    TextCtrl63->SetValue(_(""));
-    }
-
-    {
-    TextCtrl64->SetValue(_(""));
-    TextCtrl65->SetValue(_(""));
-    TextCtrl66->SetValue(_(""));
-    TextCtrl67->SetValue(_(""));
-    TextCtrl68->SetValue(_(""));
-    TextCtrl69->SetValue(_(""));
-    TextCtrl70->SetValue(_(""));
-    TextCtrl71->SetValue(_(""));
-    TextCtrl72->SetValue(_(""));
-    }
-
-    {
-    TextCtrl73->SetValue(_(""));
-    TextCtrl74->SetValue(_(""));
-    TextCtrl75->SetValue(_(""));
-    TextCtrl76->SetValue(_(""));
-    TextCtrl77->SetValue(_(""));
-    TextCtrl78->SetValue(_(""));
-    TextCtrl79->SetValue(_(""));
-    TextCtrl80->SetValue(_(""));
-    TextCtrl81->SetValue(_(""));
-    }
+    // zaktualizowanie listy plansz
+    gridNumber = TxtReader::getGridFromTxt("plansze.txt", gridList);
+    gridIndex = 0;
 }
