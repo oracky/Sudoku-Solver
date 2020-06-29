@@ -11,6 +11,7 @@
 #define SUDOKUMAIN_H
 #include <vector>
 
+
 //(*Headers(SudokuDialog)
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -42,6 +43,8 @@ class SudokuDialog: public wxDialog
         bool transformTo2DArray(const std::vector<wxString> & T, int X[9][9]);
         void clearInputs();
         void initializeFonts();
+        bool checkRowsAndCols(int X[9][9]);
+        bool checkBoxes(int X[9][9]);
 
         //(*Handlers(SudokuDialog)
         void OnQuit(wxCommandEvent& event);

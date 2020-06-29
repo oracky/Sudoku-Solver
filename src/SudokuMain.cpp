@@ -1,7 +1,7 @@
 /***************************************************************
  * Name:      SudokuMain.cpp
  * Purpose:   Code for Application Frame
- * Author:    Beata Rogala
+ * Author:    Michal Oracki
  * Created:   2020-06-12
  * Copyright:
  * License:
@@ -14,6 +14,7 @@
 #include "TxtReader.h"
 #include <string>
 #include <iostream>
+#include <unordered_map>
 
 #define FIELD_VALUES w(1)w(2)w(3)w(4)w(5)w(6)w(7)w(8)w(9)w(10)w(11)w(12)w(13)w(14)w(15)w(16)w(17)w(18)w(19)w(20)w(21)w(22)w(23)w(24)w(25)w(26)w(27)w(28)w(29)w(30)w(31)w(32)w(33)w(34)w(35)w(36)w(37)w(38)w(39)w(40)w(41)w(42)w(43)w(44)w(45)w(46)w(47)w(48)w(49)w(50)w(51)w(52)w(53)w(54)w(55)w(56)w(57)w(58)w(59)w(60)w(61)w(62)w(63)w(64)w(65)w(66)w(67)w(68)w(69)w(70)w(71)w(72)w(73)w(74)w(75)w(76)w(77)w(78)w(79)w(80)w(81)
 
@@ -470,37 +471,8 @@ SudokuDialog::~SudokuDialog()
     //*)
 }
 
-bool SudokuDialog::transformTo2DArray(const std::vector<wxString> & T, int X[9][9]){
-    std::vector<int> U(T.size());
-    for (int i=0; i< T.size(); i++)
-    {
-        if (T[i]=="")
-            U[i] = 0;
-        else
-        {
-            long int tmp;
-            if (!T[i].ToLong (&tmp))
-                return false;
-            else
-            {
-                int t = static_cast<int>(tmp);
-                if ( (t<10) && (t>0))
-                    U[i] = t;
-                else
-                    return false;
-            }
-        }
-    }
-
-    for (int i=0; i<U.size();i++) {
-            int k = i / 9; // k - number of box
-            int j = i % 9; // j - position in the box
-            int row = (k/3)*3 + j/3;
-            int column = (k%3)*3 + j%3;
-            X[row][column] = U[i];
-    }
-
-
+bool SudokuDialog::checkRowsAndCols(int X[9][9])
+{
     for (int i=0; i<SIZE; i++)
     {
         std::vector<int> rowVals;
@@ -516,7 +488,11 @@ bool SudokuDialog::transformTo2DArray(const std::vector<wxString> & T, int X[9][
 
         }
     }
+    return true;
+}
 
+bool SudokuDialog::checkBoxes(int X[9][9])
+{
     for (int i=0; i<SIZE; i+=3)
     {
         for(int j=0; j<SIZE; j+=3)
@@ -537,27 +513,63 @@ bool SudokuDialog::transformTo2DArray(const std::vector<wxString> & T, int X[9][
     return true;
 }
 
+bool SudokuDialog::transformTo2DArray(const std::vector<wxString> &T, int X[9][9]){
+    std::vector<int> U(T.size());
+    for (size_t i=0; i< T.size(); i++)
+    {
+        if (T[i]=="")
+            U[i] = 0;
+        else
+        {
+            long tmp;
+            if (!T[i].ToLong(&tmp))
+                return false;
+            else
+            {
+                int t = static_cast<int>(tmp);
+                if ((t<10) && (t>0))
+                    U[i] = t;
+                else
+                    return false;
+            }
+        }
+    }
+
+    for (size_t i=0; i<U.size();i++) {
+            int k = i / 9; // k - number of box
+            int j = i % 9; // j - position in the box
+            int row = (k/3)*3 + j/3;
+            int column = (k%3)*3 + j%3;
+            X[row][column] = U[i];
+    }
+
+    if(!checkRowsAndCols(X)) return false;
+    if(!checkBoxes(X)) return false;
+
+    return true;
+}
+
 bool SudokuDialog::getNumbers(int X[SIZE][SIZE])
 {
-   std::vector<wxString> T(81); //najpierw wrzucenie tekstów w tablicę jednowymiarową
+   std::vector<wxString> T(81);
    #define w(i) T[i-1] = TextCtrl##i->GetValue();
-   FIELD_VALUES // zatem teraz już mamy teksty z kotrolek wbite
+   FIELD_VALUES
    #undef w
    return transformTo2DArray(T, X);
 }
 
 void SudokuDialog::setNumbers(int X[SIZE][SIZE])
 {
-   std::vector<wxString> T(81);
+   std::unordered_map<int, std::string> T;
    for (int row=0; row<9; row++)
         for (int column=0; column<9; column++) {
             int j = (row%3)*3 + column%3;
             int k = (row/3)*3 + column/3;
             int nr = k*9 + j;
             if (X[row][column]==0)
-                T[nr] = "";
+                T.insert(std::make_pair(nr,""));
             else
-                T[nr] = std::to_string(X[row][column]);
+                T.insert(std::make_pair(nr,std::to_string(X[row][column])));
         }
 
    #define w(i) TextCtrl##i->SetValue(T[i-1]);

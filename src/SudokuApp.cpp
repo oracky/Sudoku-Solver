@@ -1,9 +1,9 @@
 /***************************************************************
  * Name:      SudokuApp.cpp
  * Purpose:   Code for Application Class
- * Author:    D (D)
+ * Author:    Michal Oracki
  * Created:   2020-06-12
- * Copyright: D (D)
+ * Copyright:
  * License:
  **************************************************************/
 
