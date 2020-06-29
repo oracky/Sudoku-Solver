@@ -1,5 +1,5 @@
 # Sudoku-Solver
-Sudoku solver using wxWidgets
+**Sudoku solver using wxWidgets**
 
 Possible options:
 
