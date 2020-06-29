@@ -48,8 +48,8 @@ class SudokuDialog: public wxDialog
         void OnAbout(wxCommandEvent& event);
         void OnbtnResultClick(wxCommandEvent& event);
         void OnbtnClearClick(wxCommandEvent& event);
-        void OnButton3Click(wxCommandEvent& event);
-        void OnButton4Click(wxCommandEvent& event);
+        void OnbtnLoad(wxCommandEvent& event);
+        void OnbtnSave(wxCommandEvent& event);
         //*)
 
         //(*Identifiers(SudokuDialog)
@@ -151,10 +151,10 @@ class SudokuDialog: public wxDialog
         //*)
 
         //(*Declarations(SudokuDialog)
-        wxButton* Button3;
-        wxButton* Button4;
         wxButton* btnClear;
+        wxButton* btnLoad;
         wxButton* btnResult;
+        wxButton* btnSave;
         wxPanel* Panel1;
         wxPanel* Panel2;
         wxPanel* Panel3;

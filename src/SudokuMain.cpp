@@ -446,10 +446,10 @@ SudokuDialog::SudokuDialog(wxWindow* parent,wxWindowID id)
     FlexGridSizer2->Add(btnResult, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     btnClear = new wxButton(this, ID_BUTTON2, _("Clear"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON2"));
     FlexGridSizer2->Add(btnClear, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    Button3 = new wxButton(this, ID_BUTTON3, _("Load Grid"), wxDefaultPosition, wxSize(90,22), 0, wxDefaultValidator, _T("ID_BUTTON3"));
-    FlexGridSizer2->Add(Button3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    Button4 = new wxButton(this, ID_BUTTON4, _("Save Grid"), wxDefaultPosition, wxSize(98,22), 0, wxDefaultValidator, _T("ID_BUTTON4"));
-    FlexGridSizer2->Add(Button4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    btnLoad = new wxButton(this, ID_BUTTON3, _("Load Grid"), wxDefaultPosition, wxSize(90,22), 0, wxDefaultValidator, _T("ID_BUTTON3"));
+    FlexGridSizer2->Add(btnLoad, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    btnSave = new wxButton(this, ID_BUTTON4, _("Save Grid"), wxDefaultPosition, wxSize(98,22), 0, wxDefaultValidator, _T("ID_BUTTON4"));
+    FlexGridSizer2->Add(btnSave, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer1->Add(FlexGridSizer2, 1, wxALL|wxEXPAND, 5);
     SetSizer(FlexGridSizer1);
     FlexGridSizer1->Fit(this);
@@ -457,8 +457,8 @@ SudokuDialog::SudokuDialog(wxWindow* parent,wxWindowID id)
 
     Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SudokuDialog::OnbtnResultClick);
     Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SudokuDialog::OnbtnClearClick);
-    Connect(ID_BUTTON3,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SudokuDialog::OnButton3Click);
-    Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SudokuDialog::OnButton4Click);
+    Connect(ID_BUTTON3,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SudokuDialog::OnbtnLoad);
+    Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SudokuDialog::OnbtnSave);
     //*)
     gridNumber = TxtReader::getGridFromTxt("plansze.txt", gridList);
     initializeFonts();
@@ -491,14 +491,48 @@ bool SudokuDialog::transformTo2DArray(const std::vector<wxString> & T, int X[9][
             }
         }
     }
-    // OK, mamy już zamienione teksty na liczby,
-    // jest jedno wymiarowa, w dodatku odrębnie dla kazdego kwadratu 3x3, to trzeba teraz przeliczyć
+
     for (int i=0; i<U.size();i++) {
-            int k = i / 9; // k jest numerem kwadratu w numerowaniu od 0 do 8
-            int j = i % 9; // j jest pozycja wewnątrz tego właśnie kwadratu
-            int wiersz = (k/3)*3 + j/3; // element "i" z jednowymiarowej tablice powinen wylądować w tym właśnie wierszu
-            int kolumna = (k%3)*3 + j%3; // element "i" z jednowymiarowej powinien wylądowac w tej kolumnie
-            X[wiersz][kolumna] = U[i];
+            int k = i / 9; // k - number of box
+            int j = i % 9; // j - position in the box
+            int row = (k/3)*3 + j/3;
+            int column = (k%3)*3 + j%3;
+            X[row][column] = U[i];
+    }
+
+
+    for (int i=0; i<SIZE; i++)
+    {
+        std::vector<int> rowVals;
+        std::vector<int> colVals;
+        for (int j=0; j<SIZE; j++)
+        {
+            int x = X[i][j];
+            int y = X[j][i];
+            if(find(rowVals.begin(), rowVals.end(), x) != rowVals.end() && x != 0) return false;
+            else rowVals.push_back(x);
+            if(find(colVals.begin(), colVals.end(), y) != colVals.end() && y != 0) return false;
+            else colVals.push_back(y);
+
+        }
+    }
+
+    for (int i=0; i<SIZE; i+=3)
+    {
+        for(int j=0; j<SIZE; j+=3)
+        {
+            std::vector<int> boxVals;
+            for (int k=0; k<3; k++)
+            {
+                for (int z=0; z<3; z++)
+                {
+                    int l = X[k+i][z+j];
+                    if(find(boxVals.begin(), boxVals.end(), l) != boxVals.end() && l != 0) return false;
+                    else boxVals.push_back(l);
+                }
+            }
+        }
+
     }
     return true;
 }
@@ -514,20 +548,20 @@ bool SudokuDialog::getNumbers(int X[SIZE][SIZE])
 
 void SudokuDialog::setNumbers(int X[SIZE][SIZE])
 {
-   std::vector<wxString> T(81); //najpierw wrzucenie liczb w tablicę jednowymiarową
-   for (int wiersz=0; wiersz<9; wiersz++)
-        for (int kolumna=0; kolumna<9; kolumna++) {
-            int j = (wiersz%3)*3 + kolumna%3;
-            int k = (wiersz/3)*3 + kolumna/3;
+   std::vector<wxString> T(81);
+   for (int row=0; row<9; row++)
+        for (int column=0; column<9; column++) {
+            int j = (row%3)*3 + column%3;
+            int k = (row/3)*3 + column/3;
             int nr = k*9 + j;
-            if (X[wiersz][kolumna]==0)
+            if (X[row][column]==0)
                 T[nr] = "";
             else
-                T[nr] = std::to_string(X[wiersz][kolumna]);
+                T[nr] = std::to_string(X[row][column]);
         }
 
    #define w(i) TextCtrl##i->SetValue(T[i-1]);
-   FIELD_VALUES // zatem teraz już w kontrolkach sa nowe wartości
+   FIELD_VALUES // set values to all cells
    #undef w
 }
 
@@ -541,7 +575,7 @@ void SudokuDialog::clearInputs()
 void SudokuDialog::initializeFonts()
 {
     #define w(i) TextCtrl##i->SetFont(wxFont(26, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false));
-    FIELD_VALUES
+    FIELD_VALUES // set font for all cells
     #undef w
 }
 
@@ -567,13 +601,17 @@ void SudokuDialog::OnbtnResultClick(wxCommandEvent& event)
     }
     else {
 
-        if(!Sudoku::solve(g.grid))
+        Sudoku *sudoku = new Sudoku();
+        if(!sudoku->solve(g.grid))
         {
-            wxMessageBox( _("Current sudoku is impossible to be solved"), "ERROR", wxICON_INFORMATION);
+            wxMessageBox( _("Current sudoku is impossible to be solved"), "INFO", wxICON_INFORMATION);
             g.possible = false;
         }
         setNumbers(g.grid);
 
+        if(sudoku->getNumberOfSolutions() > 1)
+            wxMessageBox(_("Current sudoku has more than one correct result!"), "INFO", wxICON_INFORMATION);
+        delete sudoku;
     }
 }
 
@@ -582,7 +620,7 @@ void SudokuDialog::OnbtnClearClick(wxCommandEvent& event)
     clearInputs();
 }
 
-void SudokuDialog::OnButton3Click(wxCommandEvent& event)
+void SudokuDialog::OnbtnLoad(wxCommandEvent& event)
 {
     if(gridNumber>0)
     {
@@ -593,7 +631,7 @@ void SudokuDialog::OnButton3Click(wxCommandEvent& event)
 
 }
 
-void SudokuDialog::OnButton4Click(wxCommandEvent& event)
+void SudokuDialog::OnbtnSave(wxCommandEvent& event)
 {
     Grid g;
 
@@ -607,7 +645,7 @@ void SudokuDialog::OnButton4Click(wxCommandEvent& event)
             wxMessageBox( _("Saving process failed"), "ERROR", wxICON_INFORMATION);
     }
 
-    // zaktualizowanie listy plansz
+    // update grid list
     gridNumber = TxtReader::getGridFromTxt("plansze.txt", gridList);
     gridIndex = 0;
 }
