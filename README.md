@@ -1,7 +1,7 @@
 # Sudoku-Solver
 **Sudoku solver using wxWidgets**
 
-Possible options:
+**Possible options:**
 
 * Solve sudoku from user input
 * Load grids from txt file
