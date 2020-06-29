@@ -4,15 +4,23 @@
 
 using namespace std;
 
-Sudoku::Sudoku(){}
+Sudoku::Sudoku(): numOfSolutions(0){}
 
 
 bool Sudoku::solve(int grid[SIZE][SIZE])
 {
     int row, col;
 
-    if (!Sudoku::findUnassignedLocation(grid, row, col))
+    if (!findUnassignedLocation(grid, row, col))
         return true;
+
+    if(numOfSolutions <= 1)
+    {
+        int tempSols = 0;
+        for(int i = 1; i <= 9; i++)
+            if(isSafe(grid, row, col, i)) tempSols++;
+        if(tempSols > 1) numOfSolutions += tempSols;
+    }
 
     for (int num = 1; num <= 9; num++) {
         if (isSafe(grid, row, col, num)) {
@@ -38,9 +46,9 @@ bool Sudoku::findUnassignedLocation(int grid[SIZE][SIZE], int& row, int& col)
 
 bool Sudoku::isSafe(int grid[SIZE][SIZE], int row, int col, int num)
 {
-     return !Sudoku::usedInRow(grid, row, num)
-           && !Sudoku::usedInCol(grid, col, num)
-           && !Sudoku::usedInBox(grid, row - row % 3,
+     return !usedInRow(grid, row, num)
+           && !usedInCol(grid, col, num)
+           && !usedInBox(grid, row - row % 3,
                          col - col % 3, num)
            && grid[row][col] == 0;
 }
@@ -72,4 +80,7 @@ bool Sudoku::usedInRow(int grid[SIZE][SIZE], int row, int num)
     return false;
 }
 
-
+int Sudoku::getNumberOfSolutions() const
+{
+    return numOfSolutions;
+}
